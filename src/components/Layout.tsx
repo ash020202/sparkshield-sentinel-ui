@@ -38,7 +38,7 @@ export const Layout = ({ children }: LayoutProps) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.4, delay: 0.2 }}
-          className="flex-1 p-4 md:p-6 lg:p-8 overflow-auto"
+          className="flex-1 p-4 md:p-6 lg:p-8 overflow-hidden"
         >
           {children}
         </motion.main>

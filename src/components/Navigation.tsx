@@ -1,9 +1,9 @@
 
-import { useLocation } from "react-router-dom";
+import { motion } from "framer-motion";
 import { 
   FileSearch, 
   Globe, 
-  Home, 
+  HomeIcon, 
   LinkIcon, 
   PanelLeft,
   ScreenShareOff, 
@@ -11,26 +11,17 @@ import {
   Shield, 
   Zap 
 } from "lucide-react";
-import { Link } from "react-router-dom";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarProvider,
-  SidebarTrigger
-} from "@/components/ui/sidebar";
+import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 export const Navigation = () => {
+  const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
 
   const navItems = [
     { 
       name: "Dashboard", 
-      icon: <Home size={20} />, 
+      icon: <HomeIcon size={20} />, 
       path: "/" 
     },
     { 
@@ -70,52 +61,96 @@ export const Navigation = () => {
   };
 
   return (
-    <SidebarProvider defaultOpen={true}>
-      <Sidebar className="bg-spark-dark-700/80 border-spark-dark-500/50 shadow-lg">
-        <SidebarHeader className="px-4 py-5">
-          <div className="flex items-center gap-2">
-            <Shield size={24} className="text-spark-blue" />
-            <span className="font-bold text-lg text-gradient-blue">SparkShield</span>
-          </div>
-          <SidebarTrigger className="absolute right-2 top-5 text-spark-gray-300 hover:text-white" />
-        </SidebarHeader>
-        
-        <SidebarContent className="px-2">
-          <SidebarMenu>
-            {navItems.map((item) => (
-              <SidebarMenuItem key={item.name}>
-                <SidebarMenuButton
-                  asChild
-                  tooltip={item.name}
-                  isActive={isActive(item.path)}
-                  className={`${
-                    isActive(item.path) 
-                      ? "bg-spark-blue/10 text-white" 
-                      : "text-spark-gray-300 hover:bg-spark-dark-500/70 hover:text-white"
-                  }`}
-                >
-                  <Link to={item.path} className="flex items-center gap-3">
-                    <span className={`${isActive(item.path) ? "text-spark-blue" : ""}`}>
-                      {item.icon}
-                    </span>
-                    <span>{item.name}</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
-        </SidebarContent>
-
-        <SidebarFooter className="mt-auto px-4 pb-6">
-          <div className="glass-card p-3 rounded-lg">
-            <div className="flex items-center text-xs mb-2 font-medium text-spark-gray-200">
-              <Shield size={14} className="mr-1.5 text-spark-green" />
-              Shield Status: Active
+    <motion.div
+      initial={{ x: -10, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      transition={{ duration: 0.3, delay: 0.1 }}
+      className={`${
+        collapsed ? "w-16" : "w-64"
+      } transition-all duration-300 ease-in-out h-screen glass-panel fixed md:relative z-20`}
+    >
+      <div className="h-full flex flex-col py-6">
+        <div className="px-4 mb-6 flex items-center">
+          {!collapsed && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              className="mr-2"
+            >
+              <div className="flex items-center gap-2">
+                <Shield size={24} className="text-spark-blue" />
+                <span className="font-bold text-lg text-gradient-blue">SparkShield</span>
+              </div>
+            </motion.div>
+          )}
+          {collapsed && (
+            <div className="w-full flex justify-center">
+              <Shield size={24} className="text-spark-blue" />
             </div>
-            <div className="text-xs text-spark-gray-300">Real-time protection enabled</div>
+          )}
+          <button
+            onClick={() => setCollapsed(!collapsed)}
+            className="ml-auto p-1 text-spark-gray-300 hover:text-white transition-colors"
+          >
+            <PanelLeft size={18} />
+          </button>
+        </div>
+
+        <div className="flex-1 overflow-y-auto scrollbar-none px-2">
+          <ul className="space-y-1">
+            {navItems.map((item) => (
+              <li key={item.name}>
+                <Link
+                  to={item.path}
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-md transition-all duration-200 ${
+                    isActive(item.path)
+                      ? "bg-spark-blue/10 text-white"
+                      : "text-spark-gray-300 hover:bg-spark-dark-500/70 hover:text-white"
+                  } ${collapsed ? "justify-center" : "justify-start"}`}
+                >
+                  <span 
+                    className={`${
+                      isActive(item.path) ? "text-spark-blue" : ""
+                    }`}
+                  >
+                    {item.icon}
+                  </span>
+                  {!collapsed && (
+                    <span className={`text-sm ${isActive(item.path) ? "font-medium" : ""}`}>
+                      {item.name}
+                    </span>
+                  )}
+                  {isActive(item.path) && !collapsed && (
+                    <motion.div
+                      layoutId="active-nav-pill"
+                      className="absolute right-2 w-1.5 h-1.5 rounded-full bg-spark-blue"
+                    />
+                  )}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="mt-auto px-4">
+          <div className={`glass-card p-3 rounded-lg ${collapsed ? "text-center" : ""}`}>
+            {!collapsed ? (
+              <div>
+                <div className="flex items-center text-xs mb-2 font-medium text-spark-gray-200">
+                  <Shield size={14} className="mr-1.5 text-spark-green" />
+                  Shield Status: Active
+                </div>
+                <div className="text-xs text-spark-gray-300">Real-time protection enabled</div>
+              </div>
+            ) : (
+              <div className="flex justify-center">
+                <Shield size={18} className="text-spark-green" />
+              </div>
+            )}
           </div>
-        </SidebarFooter>
-      </Sidebar>
-    </SidebarProvider>
+        </div>
+      </div>
+    </motion.div>
   );
 };

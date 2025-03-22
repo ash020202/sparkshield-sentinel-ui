@@ -1,6 +1,7 @@
 
 import { motion } from "framer-motion";
 import { ReactNode, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { Loader } from "./Loader";
 import { Navigation } from "./Navigation";
 
@@ -9,16 +10,20 @@ interface LayoutProps {
 }
 
 export const Layout = ({ children }: LayoutProps) => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
-    // Simulate loading time
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 3500);
+    // Only show loader for dashboard page (root path)
+    if (location.pathname === "/") {
+      setLoading(true);
+      const timer = setTimeout(() => {
+        setLoading(false);
+      }, 3500);
 
-    return () => clearTimeout(timer);
-  }, []);
+      return () => clearTimeout(timer);
+    }
+  }, [location.pathname]);
 
   if (loading) {
     return <Loader />;

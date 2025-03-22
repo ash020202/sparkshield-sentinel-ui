@@ -9,6 +9,8 @@ import FileScanner from "./pages/FileScanner";
 import URLScanner from "./pages/URLScanner";
 import DomainScanner from "./pages/DomainScanner";
 import IPScanner from "./pages/IPScanner";
+import PhishingDetector from "./pages/PhishingDetector";
+import CodeRepair from "./pages/CodeRepair";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,6 +27,8 @@ const App = () => (
           <Route path="/url-scanner" element={<URLScanner />} />
           <Route path="/domain-scanner" element={<DomainScanner />} />
           <Route path="/ip-scanner" element={<IPScanner />} />
+          <Route path="/phishing-detector" element={<PhishingDetector />} />
+          <Route path="/code-repair" element={<CodeRepair />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

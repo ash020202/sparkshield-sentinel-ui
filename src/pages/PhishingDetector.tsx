@@ -8,9 +8,9 @@ const PhishingDetector = () => {
     <Layout>
       <Scanner
         title="Phishing Detector"
-        description="Detect and analyze potential phishing websites by entering a URL. Our AI will scan for suspicious patterns and security risks."
+        description="Upload a screenshot of a suspicious website for our AI to analyze and detect potential phishing patterns."
         icon={<ScreenShareOff size={32} />}
-        placeholder="Enter website URL to check for phishing (e.g., https://example.com)"
+        placeholder="Drop a screenshot here or click to browse"
         scanType="phishing"
       />
     </Layout>

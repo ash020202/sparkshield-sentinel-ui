@@ -8,9 +8,9 @@ const CodeRepair = () => {
     <Layout>
       <Scanner
         title="Code Repair"
-        description="Upload or paste your code to scan for security vulnerabilities, malware injections, and get AI-powered suggestions for repairs."
+        description="Enter a GitHub repository URL to scan for security vulnerabilities, malware injections, and get AI-powered suggestions for repairs."
         icon={<Zap size={32} />}
-        placeholder="Paste your code or upload a file"
+        placeholder="Enter GitHub repository URL (e.g., https://github.com/username/repo)"
         scanType="code"
       />
     </Layout>

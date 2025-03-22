@@ -5,7 +5,7 @@ import { slideUpFade } from "@/lib/animations";
 
 interface ScanResultProps {
   result: "clean" | "suspicious" | "malicious";
-  scanType: "file" | "url" | "domain" | "ip";
+  scanType: "file" | "url" | "domain" | "ip" | "code" | "phishing";
   itemName: string;
   onNewScan: () => void;
 }
@@ -81,22 +81,28 @@ export const ScanResult = ({ result, scanType, itemName, onNewScan }: ScanResult
         case "file":
           return "Exercise caution with this file. Consider scanning with another tool or avoid opening if uncertain.";
         case "url":
+        case "phishing":
           return "Be cautious when visiting this URL. It may contain questionable content or use deceptive practices.";
         case "domain":
           return "Use caution when interacting with this domain. It shows some patterns consistent with suspicious activity.";
         case "ip":
           return "This IP address shows suspicious behavior. Monitor any connections to this address.";
+        case "code":
+          return "This code contains some suspicious patterns. Review carefully before execution.";
       }
     } else {
       switch (scanType) {
         case "file":
           return "Delete this file immediately. It contains malicious code that can harm your system.";
         case "url":
+        case "phishing":
           return "Do not visit this URL. It contains malicious content that can compromise your security.";
         case "domain":
           return "Avoid any interaction with this domain. It is associated with malicious activities.";
         case "ip":
           return "Block this IP address. It is known to host malicious content or engage in attacks.";
+        case "code":
+          return "Do not execute this code. It contains malicious patterns that can harm your system.";
       }
     }
   };

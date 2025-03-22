@@ -9,7 +9,7 @@ interface ScannerProps {
   description: string;
   icon: ReactNode;
   placeholder: string;
-  scanType: "file" | "url" | "domain" | "ip";
+  scanType: "file" | "url" | "domain" | "ip" | "code" | "phishing";
 }
 
 export const Scanner = ({ title, description, icon, placeholder, scanType }: ScannerProps) => {
@@ -94,7 +94,7 @@ export const Scanner = ({ title, description, icon, placeholder, scanType }: Sca
         transition={{ duration: 0.4, delay: 0.1 }}
         className="glass-card p-6 rounded-xl mb-8"
       >
-        {scanType === "file" ? (
+        {scanType === "file" || scanType === "code" ? (
           <div
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
@@ -107,10 +107,12 @@ export const Scanner = ({ title, description, icon, placeholder, scanType }: Sca
           >
             <Upload className="mx-auto h-12 w-12 text-spark-gray-300 mb-4" />
             <h3 className="text-lg font-medium mb-2">
-              Drag and drop your file here
+              Drag and drop your {scanType === "code" ? "code file" : "file"} here
             </h3>
             <p className="text-spark-gray-300 text-sm mb-4">
-              or click to browse from your computer
+              {scanType === "code" 
+                ? "or paste your code in the text area below" 
+                : "or click to browse from your computer"}
             </p>
             <input
               type="file"
@@ -129,11 +131,19 @@ export const Scanner = ({ title, description, icon, placeholder, scanType }: Sca
                 Selected: <span className="font-medium">{input}</span>
               </div>
             )}
+            {scanType === "code" && (
+              <textarea
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder={placeholder}
+                className="w-full mt-6 bg-spark-dark-700 border border-spark-dark-500 focus:border-spark-blue/50 rounded-lg px-4 py-2.5 text-white placeholder-spark-gray-400 outline-none transition-colors h-40"
+              />
+            )}
           </div>
         ) : (
           <div>
             <label className="block text-sm font-medium text-spark-gray-200 mb-2">
-              Enter {scanType === "url" ? "URL" : scanType === "domain" ? "domain name" : "IP address"} to scan
+              Enter {scanType === "url" || scanType === "phishing" ? "URL" : scanType === "domain" ? "domain name" : "IP address"} to scan
             </label>
             <div className="flex items-center gap-2">
               <input
@@ -165,7 +175,7 @@ export const Scanner = ({ title, description, icon, placeholder, scanType }: Sca
                 )}
               </button>
             </div>
-            {scanType === "url" && (
+            {(scanType === "url" || scanType === "phishing") && (
               <p className="mt-2 text-xs text-spark-gray-300 flex items-center">
                 <AlertCircle size={12} className="mr-1 text-spark-gray-400" />
                 Use complete URLs including http:// or https://
@@ -175,7 +185,7 @@ export const Scanner = ({ title, description, icon, placeholder, scanType }: Sca
         )}
       </motion.div>
 
-      {scanType === "file" && input && (
+      {(scanType === "file" || scanType === "code") && input && (
         <div className="flex justify-center">
           <button
             onClick={handleScan}
